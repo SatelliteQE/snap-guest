@@ -219,13 +219,16 @@ if [ -f "$TARGET_IMG" ]; then
   if [ $FORCE -eq 1 ]; then
     REPLY="y"
   else
-    read -p "Shutdown and remove host with this name first (y/[n])? "
+    read -p "Shutdown and remove host with this name first (y/[n])? " REPLY
   fi
-  [ "$REPLY" != "y" ] && \
+  if [ "$REPLY" = "y" ]; then
     # need to do it twice (sometimes this fail)
-    virsh destroy "$TARGET_NAME" 2>/dev/null; sleep 2s; \
-    virsh destroy "$TARGET_NAME" 2>/dev/null; sleep 1s; \
+    virsh destroy "$TARGET_NAME" 2>/dev/null
+    sleep 2s
+    virsh destroy "$TARGET_NAME" 2>/dev/null
+    sleep 1s
     virsh undefine "$TARGET_NAME"
+   fi
 fi
 
 echo "Creating snapshot guest $TARGET_NAME"
