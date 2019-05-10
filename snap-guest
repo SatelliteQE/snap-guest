@@ -228,7 +228,9 @@ if [ -f "$TARGET_IMG" ]; then
     virsh destroy "$TARGET_NAME" 2>/dev/null
     sleep 1s
     virsh undefine "$TARGET_NAME"
-   fi
+  else
+    exit 1
+  fi
 fi
 
 echo "Creating snapshot guest $TARGET_NAME"
